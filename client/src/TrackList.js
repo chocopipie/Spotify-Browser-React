@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Container from 'react-bootstrap/esm/Container';
 import Table from 'react-bootstrap/Table';
+import {Link} from 'react-router-dom'
 
 const TrackList = ({data}) => {
     let hideArtist = false;
@@ -38,7 +39,7 @@ const TrackList = ({data}) => {
                     <tr key={index}>
                         <td>{index + 1}</td>
                         <td>
-                            <a href="#">{track.name}</a>
+                            <Link to={`/track/${track.id}`}>{track.name}</Link>
                         </td>
                         <td>{durationStr(track.duration_ms)}</td>
                         {hideArtist === false && <td>{track.artists[0].name}</td>}

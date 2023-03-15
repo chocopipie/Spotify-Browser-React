@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import {Link} from 'react-router-dom'
 
 function ControlledCarousel({data, searchType}) {
   //console.log(data)
@@ -28,11 +29,11 @@ function ControlledCarousel({data, searchType}) {
         {dataArray.map((item,index) => (
           <Carousel.Item key={index}>
             {item.images.length > 0 &&
-              <a href={item.external_urls.spotify}><img
+              <Link to={`/${searchType}/${item.id}`}><img
               className="d-block w-100"
               src={item.images[0].url}
               alt="First slide"
-              /></a>
+              /></Link>
             }
             <Carousel.Caption>
               <h3>{item.name}</h3>
