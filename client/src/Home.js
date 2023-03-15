@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ControlledCarousel from './ControlledCarousel';
 import { useState } from 'react';
+import TrackList from './TrackList';
 
 function Home() {
     const [searchKey, setSearchKey] = useState('');
@@ -13,10 +14,11 @@ function Home() {
     const [artistSearch, setArtistSearch] = useState(false);
     const [albumSearch, setAlbumSearch] = useState(false);
     const [trackSearch, setTrackSearch] = useState(false);
+    const [data, setData] = useState(null)
+    const [isPending, setIsPending] = useState(true)
 
     function Search() {
-        console.log(searchKey)
-        console.log(searchType)
+        setIsPending(true) 
         if (searchType === 'artist') {
             setAlbumSearch(false)
             setTrackSearch(false)
@@ -27,7 +29,7 @@ function Home() {
             setArtistSearch(false)
             setAlbumSearch(true)
         }
-        if (searchType === 'track') {
+        else if (searchType === 'track') {
             setAlbumSearch(false)
             setArtistSearch(false)
             setTrackSearch(true)
@@ -40,10 +42,18 @@ function Home() {
             }
             return res.json();
         }).then(data => {
-            console.log(data)
+            //console.log(data)
+            setData(data)
+            setIsPending(false);
         }). catch(err => {
-            console.log(err.message)
+            if (err.name === 'AbortError') {
+                console.log('fetch aborted')
+            } else {
+                console.log(err.message)
+            }
         })
+        console.log(searchKey)
+        console.log(searchType)
     }
 
     return (
@@ -71,9 +81,9 @@ function Home() {
                         </Button>
                     </Form>
                    
-                    {artistSearch && <ControlledCarousel />}
-                    {albumSearch && <div>hi</div>}
-                    {trackSearch && <div>ba</div>}  
+                    {isPending === false && artistSearch && data && <ControlledCarousel data={data} searchType={searchType}/>}
+                    {isPending === false && albumSearch && data && <ControlledCarousel data={data} searchType={searchType}/>}
+                    {isPending === false && trackSearch && data && <TrackList data={data} />}  
                 
                 </Col>
 

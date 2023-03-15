@@ -1,53 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 
-function ControlledCarousel() {
+function ControlledCarousel({data, searchType}) {
+  //console.log(data)
+  //console.log(searchType)
+  //console.log(data)
+  //console.log(data['artists']['items'])
   const [index, setIndex] = useState(0);
+  const [dataArray, setDataArray] = useState(null);
+  // do once when render
+  useEffect(() => {
+    if (searchType === 'artist') {
+      setDataArray(data['artists']['items'])
+    } else if (searchType === 'album') {
+      setDataArray(data['albums']['items'])
+    }
+  }, [])
+  //console.log(dataArray)
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
 
   return (
-    <Carousel activeIndex={index} onSelect={handleSelect}>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="https://i.pinimg.com/736x/fa/02/02/fa0202572e8aa734cedb154c413a4846.jpg"
-          alt="First slide"
-        />
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="https://i.pinimg.com/originals/fb/42/30/fb42303f0554c463ed89ed9dc34c624e.jpg"
-          alt="Second slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="https://i.pinimg.com/originals/01/48/0f/01480f29ce376005edcbec0b30cf367d.jpg"
-          alt="Third slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+    <div className="carousel">
+      {dataArray !== null && <Carousel activeIndex={index} onSelect={handleSelect}>
+        {dataArray.map((item,index) => (
+          <Carousel.Item key={index}>
+            {item.images.length > 0 &&
+              <a href={item.external_urls.spotify}><img
+              className="d-block w-100"
+              src={item.images[0].url}
+              alt="First slide"
+              /></a>
+            }
+            <Carousel.Caption>
+              <h3>{item.name}</h3>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+      }
+    </div>
   );
 }
 
