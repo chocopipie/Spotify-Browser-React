@@ -83,7 +83,7 @@ function Home() {
                    
                     {isPending === false && artistSearch && data && <ControlledCarousel data={data} searchType={searchType}/>}
                     {isPending === false && albumSearch && data && <ControlledCarousel data={data} searchType={searchType}/>}
-                    {isPending === false && trackSearch && data && <TrackList data={data} />}  
+                    {isPending === false && trackSearch && data && <TrackList data={data} type="homeTrack" hideAlbum={false} hideArtist={false} />}  
                 
                 </Col>
 

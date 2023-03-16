@@ -5,16 +5,24 @@ import {Link} from 'react-router-dom'
 function ControlledCarousel({data, searchType}) {
   //console.log(data)
   //console.log(searchType)
-  //console.log(data)
   //console.log(data['artists']['items'])
   const [index, setIndex] = useState(0);
   const [dataArray, setDataArray] = useState(null);
+  const [category, setCategory] = useState(null) 
   // do once when render
   useEffect(() => {
     if (searchType === 'artist') {
       setDataArray(data['artists']['items'])
+      setCategory('artist')
     } else if (searchType === 'album') {
       setDataArray(data['albums']['items'])
+      setCategory('album')
+    } else if (searchType === 'similar-artist') {
+      setDataArray(data['artists'])
+      setCategory('artist')
+    } else if (searchType === 'artist-album') {
+      setDataArray(data['items'])
+      setCategory('album')
     }
   }, [])
   //console.log(dataArray)
@@ -29,11 +37,11 @@ function ControlledCarousel({data, searchType}) {
         {dataArray.map((item,index) => (
           <Carousel.Item key={index}>
             {item.images.length > 0 &&
-              <Link to={`/${searchType}/${item.id}`}><img
+              <a href={`/${category}/${item.id}`}><img
               className="d-block w-100"
               src={item.images[0].url}
               alt="First slide"
-              /></Link>
+              /></a>
             }
             <Carousel.Caption>
               <h3>{item.name}</h3>

@@ -3,15 +3,21 @@ import Container from 'react-bootstrap/esm/Container';
 import Table from 'react-bootstrap/Table';
 import {Link} from 'react-router-dom'
 
-const TrackList = ({data}) => {
-    let hideArtist = false;
-    let hideAlbum = false;
+const TrackList = ({data, type, hideAlbum, hideArtist}) => {
+    //let hideArtist = false;
+    //let hideAlbum = false;
     //console.log(data)
+    //console.log(type)
     const [dataArray, setDataArray] = useState(null);
 
     // do once when render
     useEffect(() => {
-        setDataArray(data['tracks']['items'])
+        if (type === 'homeTrack')
+            setDataArray(data['tracks']['items'])
+        else if (type === 'artistTrack')
+            setDataArray(data['tracks'])
+        else if (type === 'albumTrack')
+            setDataArray(data['items'])
     }, [])
     //console.log(dataArray)
 
@@ -39,11 +45,11 @@ const TrackList = ({data}) => {
                     <tr key={index}>
                         <td>{index + 1}</td>
                         <td>
-                            <Link to={`/track/${track.id}`}>{track.name}</Link>
+                            <a href={`/track/${track.id}`}>{track.name}</a>
                         </td>
                         <td>{durationStr(track.duration_ms)}</td>
-                        {hideArtist === false && <td>{track.artists[0].name}</td>}
-                        {hideAlbum === false && <td>{track.album.name}</td>}
+                        {hideArtist === false && <td><a href={`/artist/${track.artists[0].id}`}>{track.artists[0].name}</a></td>}
+                        {hideAlbum === false && <td><a href={`/album/${track.album.id}`}>{track.album.name}</a></td>}
                     </tr>
                 ))}
                 </tbody>
